@@ -1,13 +1,13 @@
-package com.verygoodbank.tes.controller.model;
+package com.verygoodbank.tes.model;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.Builder;
 import lombok.Data;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 
 @Data
 @Builder(toBuilder = true)
@@ -21,9 +21,6 @@ public class Trade {
 
     @CsvBindByName(column = "currency")
     private String currency;
-
-    @CsvBindByName(column = "Trade ID")
-    private Long tradeId;
 
     @CsvBindByName(column = "price")
     //TODO consider BigDecimal?
@@ -40,12 +37,26 @@ public class Trade {
                 .build();
     }
 
+    // A hack to gen header, should consider to native API from opencsv, XD
+    public String toCsvHeader() {
+        return "date,productName,currency,price" + "\n";
+    }
+
     @Override
     public String toString() {
         return String.join(",", tradeDate, productName, currency, price) + "\n";
     }
 
-    public byte[] toCSVBytes() {
-        return this.toString().getBytes(StandardCharsets.UTF_8);
+    public byte[] toCsvHeaderBytes() {
+        return getUTF8Bytes(toCsvHeader());
     }
+
+    public byte[] toCsvRowBytes() {
+        return getUTF8Bytes(toString());
+    }
+
+    public byte[] getUTF8Bytes(String str) {
+        return str.getBytes(StandardCharsets.UTF_8);
+    }
+
 }

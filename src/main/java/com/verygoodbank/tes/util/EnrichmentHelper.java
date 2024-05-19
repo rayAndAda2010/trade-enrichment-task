@@ -1,9 +1,8 @@
 package com.verygoodbank.tes.util;
 
 import com.opencsv.CSVReader;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import reactor.core.publisher.Flux;
 
 import java.io.BufferedReader;
@@ -12,32 +11,29 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-// TODO is it good to do logging in util class
 @Slf4j
 public class EnrichmentHelper {
 
     private static final DateTimeFormatter yyyyMMddPattern = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public static boolean isValidDate(final String tradeDate) {
-        if (tradeDate == null || "".equals(tradeDate))
-            return false;
+        if (Strings.isEmpty(tradeDate)) return false;
         try {
             LocalDate.parse(tradeDate, yyyyMMddPattern);
         } catch (DateTimeParseException e) {
-            log.warn("Invalid date: {}", tradeDate);
             return false;
         }
         return true;
     }
 
     public static Flux<String[]> convertCSV(final InputStream ins) {
+        if (ins == null) return Flux.empty();
         try (InputStreamReader insReader = new InputStreamReader(ins);
              BufferedReader bufferedReader = new BufferedReader(insReader);
              CSVReader csvReader = new CSVReader(bufferedReader)) {

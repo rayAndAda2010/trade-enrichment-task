@@ -1,6 +1,6 @@
 package com.verygoodbank.tes.service;
 
-import com.verygoodbank.tes.controller.model.Product;
+import com.verygoodbank.tes.model.Product;
 import com.verygoodbank.tes.repository.ProductRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -18,22 +18,16 @@ import java.util.Map;
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceImplTest {
 
-    private ProductServiceImpl productServiceImpl;
-
     @Mock
     private ProductRepository productRepository;
 
     @Test
     void givenRequestGetAllProducts_whenCallingGetAllProducts_thenAllProductsReturnOk() {
-        Product p1 = new Product();
-        p1.setProductId(1L);
-        p1.setProductName("ProductA");
-        Product p2 = new Product();
-        p2.setProductId(2L);
-        p2.setProductName("ProductB");
+        Product p1 = new Product(1L, "ProductA");
+        Product p2 = new Product(2L, "ProductB");
 
         Mockito.doReturn(List.of(p1, p2)).when(productRepository).findAll();
-        productServiceImpl = new ProductServiceImpl(productRepository);
+        ProductServiceImpl productServiceImpl = new ProductServiceImpl(productRepository);
         final Map<Long, Product> idToProductsMapping = productServiceImpl.getAllProducts().block();
 
         assertNotEquals(null, idToProductsMapping);

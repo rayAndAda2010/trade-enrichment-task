@@ -2,7 +2,7 @@ package com.verygoodbank.tes.repository;
 
 
 
-import com.verygoodbank.tes.controller.model.Product;
+import com.verygoodbank.tes.model.Product;
 
 import java.util.Collection;
 
