@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="WARN">
+    <Appenders>
+        <RollingFile name="fileLogger" fileName="trade-enrichment-service-latest.log"
+                     filePattern="trade-enrichment-service-latest-%d{yyyyMMdd}-%i.log">
+            <PatternLayout>
+                <Pattern>%d{yyyyMMdd-HH:mm:ss.SSS} [%t] %-5p %c{1.}:%L - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.verygoodbank.tes" level="INFO" additivity="false">
+            <AppenderRef ref="fileLogger" />
+        </Logger>
+        <Logger name="org.springframework.boot" level="INFO" additivity="false">
+            <AppenderRef ref="fileLogger"/>
+        </Logger>
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="fileLogger"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
