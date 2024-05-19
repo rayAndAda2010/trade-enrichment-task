@@ -8,7 +8,7 @@
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-                <SizeBasedTriggeringPolicy size="10MB"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
                 <OnStartupTriggeringPolicy/>
             </Policies>
             <DefaultRolloverStrategy max="30"/>

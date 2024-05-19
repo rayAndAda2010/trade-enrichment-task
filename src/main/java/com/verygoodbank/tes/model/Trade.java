@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Data
 @Builder(toBuilder = true)
@@ -23,11 +20,11 @@ public class Trade {
     private String currency;
 
     @CsvBindByName(column = "price")
-    //TODO consider BigDecimal?
     private String price;
 
     private String productName;
 
+    // TODO should leverage a better way to do the conversion
     public static Trade from(final String[] csvRow) {
         return Trade.builder()
                 .tradeDate(csvRow[0])

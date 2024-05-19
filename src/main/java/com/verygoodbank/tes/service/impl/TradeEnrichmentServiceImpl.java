@@ -24,6 +24,10 @@ public class TradeEnrichmentServiceImpl implements TradeEnrichmentService {
 
     @Override
     public Flux<Trade> doEnrich(final Flux<Trade> incomingTrades) {
+        // Let's assume product data will be refreshed day by day.
+        // To simplify the case, we just make it as today.
+        final String today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+
         return incomingTrades
                 .filter(trade -> {
                     if (EnrichmentHelper.isValidDate(trade.getTradeDate())) return true;
@@ -32,16 +36,17 @@ public class TradeEnrichmentServiceImpl implements TradeEnrichmentService {
                 })
                 .flatMap(trade -> {
                     final Long productId = trade.getProductId();
-                    return productService.getProductById(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE), productId)
+                    return productService.getProductById(today, productId)
                             .switchIfEmpty(Mono.just(new Product(-1L, "Missing Product Name")))
                             .map(product -> {
                                 trade.setProductName(product.getProductName());
                                 return trade;
                             });
-                }).onErrorResume(Exception.class, e -> {
-                            log.error(e.getMessage());
+                })
+                .onErrorResume(Exception.class, e -> {
+                            log.error(e.getMessage(), e);
                             return Mono.empty();
                         }
-                ).publishOn(Schedulers.boundedElastic());
+                );
     }
 }

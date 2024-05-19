@@ -63,9 +63,7 @@ public class ProductServiceImpl implements ProductService {
         final Map<Long, Product> idToProducts = productRepository.findAll()
                 .stream()
                 .collect(Collectors.toMap(Product::getProductId, Function.identity(),
-                        (oldValue, newValue) -> {
-                            throw new IllegalArgumentException("Duplicate key: " + oldValue);
-                        }));
+                        (oldValue, newValue) -> newValue));
         // In fact, if the datasource support reactive stream natively, we won't need to create Mono like this.
         return Mono.just(idToProducts);
 
