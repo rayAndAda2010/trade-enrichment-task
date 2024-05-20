@@ -77,7 +77,7 @@ In this example, we create a Mono that emits a single string and a Flux that emi
 - No Springboot config server
 - The current code does not have fine-grained control over the reactive stream（e.g. back pressure）
 - The member field "price" within Trade should not be declared as String
-- The product cache is managed by Spring Admin Server
+- The product cache cannot be managed by Spring Admin Server (Require to register it to CacheManager)
 - No API authorization
 - No Https enabled
 - No integration test
