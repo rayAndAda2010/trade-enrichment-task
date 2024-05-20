@@ -84,14 +84,11 @@ public class TradeEnrichmentServiceImplTest {
     }
 
     private List<Product> mockProducts() {
-
         Product p1 = new Product(1L, "ProductA");
         Product p2 = new Product(2L, "ProductB");
         Product p3 = new Product(3L, "ProductC");
 
         return Stream.of(p1, p2, p3).collect(Collectors.toList());
-
-
     }
 
 }
